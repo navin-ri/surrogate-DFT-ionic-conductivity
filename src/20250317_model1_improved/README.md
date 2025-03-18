@@ -15,3 +15,4 @@
   }`
 
 - elemental_poperties, and ion_properties were set to 'imipute_nan = True'
+- cutoff in BondFractions(cutoff=10.0)

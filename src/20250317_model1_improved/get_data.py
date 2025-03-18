@@ -9,11 +9,13 @@ from matminer.featurizers.composition import(ElementProperty,
                                              Stoichiometry,
                                              IonProperty)
 from pymatgen.core.composition import Composition
+from pymatgen.core.structure import Structure
 
 API_KEY = 'kTPLAuLmdrhseG3PJtR9ZjdF5lKNln3n'
 
 with MPRester(API_KEY) as mpr:
     docs = mpr.materials.summary.search(
+        deprecated=False, # Don't use depreciated materials
         fields = ['material_id',
                   'formula_pretty',
                   'structure', 'band_gap',
@@ -40,6 +42,14 @@ df = pd.DataFrame(data)
 df['composition'] = df['formula_pretty'].apply(lambda x: Composition(x))
 
 # Initialize and fit BondFractions to determine allowed bonds
+def add_oxidation_states(structure):
+    try:
+        return structure.add_oxidation_state_by_guess()
+    except Exception:
+        return structure  # If it fails, return original structure
+
+df['structure'] = df['structure'].apply(add_oxidation_states)
+
 bf = BondFractions()
 bf.fit(df['structure'].dropna().tolist())  # Fit on existing structures
 
@@ -79,3 +89,5 @@ for feature_name, featurizer in featurizers.items():
 
 # Display the DataFrame with all featurizers applied
 print(f'The head of the DataFrame with all featurizers applied: \n {df.head()}')
+
+df.to_csv('saved_df.csv', index = False)
