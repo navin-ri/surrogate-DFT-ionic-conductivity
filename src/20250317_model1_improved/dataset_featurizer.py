@@ -8,7 +8,6 @@ from matminer.featurizers.composition import (ElementProperty,
                                              Stoichiometry,
                                              IonProperty)
 from matminer.featurizers.conversions import StrToComposition
-from pymatgen.core.composition import Composition
 from pymatgen.core.structure import Structure
 
 # import the 
@@ -16,38 +15,42 @@ df = pd.read_json("/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin
 df['structure'] = df['structure'].apply(Structure.from_dict)
 
 # Test with a small subset of the dataset: 10000
-df = df[1000:1100]
+df = df[:10000]
+
+# ------Initalize features----------
 
 # Convert pretty formula to composition
 stc = StrToComposition()
 df = stc.featurize_dataframe(df, 'formula_pretty')
 
-## Featurize composition
-### Elemental property
-ep = ElementProperty.from_preset('magpie', impute_nan=True)
-df = ep.featurize_dataframe(df, 'composition')
+# Composition features
+composition_featurizers = [
+    ElementProperty.from_preset('magpie', impute_nan=True),
+    Stoichiometry(),
+    IonProperty(impute_nan=True),
+]
 
-### Stochiometry
-st = Stoichiometry()
-df = st.featurize_dataframe(df, 'composition')
+# Handle BondFractions separately (needs fitting)
+bond_fractions = BondFractions.from_preset('VoronoiNN')
+bond_fractions.fit(df['structure'])  # Must fit
 
-### Ion property
-ip = IonProperty(impute_nan= True)
-df = ip.featurize_dataframe(df, 'composition')
+# Structure features (initialize first, skip BondFractions for now)
+structure_featurizers = [
+    bond_fractions,
+    MaximumPackingEfficiency(),
+    SiteStatsFingerprint(VoronoiFingerprint()),
+    DensityFeatures(),
+]
+
+# ------Featurization----------
+# Featurize compositions
+for feature in composition_featurizers:
+    df =  feature.featurize_dataframe(df, 'composition')
 
 # Featurize structure
-### Bond fraction
-ip = BondFractions.from_preset('VoronoiNN')
-ip.fit(df['structure'])
-df = ip.featurize_dataframe(df, 'structure')
+for feature in structure_featurizers:
+    print(f"Featurizing with: {feature.__class__.__name__}")
+    df = feature.featurize_dataframe(df, 'structure', ignore_errors=True)
 
-### Maximum packing efficiency
-mpe = MaximumPackingEfficiency()
-df = mpe.featurize_dataframe(df, 'structure')
-
-### Site stat fingerprint
-ssf = SiteStatsFingerprint(VoronoiFingerprint())
-df = ssf.featurize_dataframe(df, 'structure')
-
-# Save to .csv
-df.to_csv('/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250317_model1_improved/test_featurized.csv', index = False)
+# ------save to .csv----------
+df.to_csv('/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250317_model1_improved/10000_featurized.csv', index = False)
