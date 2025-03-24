@@ -16,6 +16,13 @@
     "density_features": DensityFeatures(),
     "site_stats_fingerprint": SiteStatsFingerprint(VoronoiFingerprint())
   }```
-
 - elemental_poperties, and ion_properties were set to 'imipute_nan = True'
-- cutoff in BondFractions(no_oxi=True)
+- 'ignore errors = True' was turned in structure featurization
+
+## 10000_featurizer.py
+- passed
+- ~ 8 hour run time
+
+## scikit_multi_RF.py
+- decent perfomance in multioutput(random forest)
+- passed. But energy above hull.
