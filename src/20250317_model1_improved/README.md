@@ -26,3 +26,9 @@
 ## scikit_multi_RF.py
 - decent perfomance in multioutput(random forest)
 - passed. But energy above hull.
+
+## IC material query
+[MPQuery_for_IC.py]
+- OBELiX project dataset and its formula to query the material.
+- In all.csv, IC = < 1E 10 was assumed as IC = 1E 10
+- 137/599 materials matched
