@@ -10,12 +10,12 @@ from matminer.featurizers.composition import (ElementProperty,
 from matminer.featurizers.conversions import StrToComposition
 from pymatgen.core.structure import Structure
 
-# import the 
-df = pd.read_json("/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250317_model1_improved/query_data.json", orient="records")
-df['structure'] = df['structure'].apply(Structure.from_dict)
+# import .json file
+df = pd.read_json(query_data.json", orient="records")
 
-# Test with a small subset of the dataset: 10000
-df = df[:10000]
+df = df.select_dtypes(exclude=['object', 'string'])
+
+df['structure'] = df['structure'].apply(Structure.from_dict)
 
 # ------Initalize features----------
 

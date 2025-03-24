@@ -24,7 +24,7 @@
 - ~ 8 hour run time
 
 ## scikit_multi_RF.py
-- decent perfomance in multioutput(random forest)
+- decent perfomance in MultiOutputRegressor(random forest)
 - passed. But energy above hull.
 
 ## IC material query
