@@ -11,7 +11,7 @@ from matminer.featurizers.conversions import StrToComposition
 from pymatgen.core.structure import Structure
 
 # import .json file
-df = pd.read_json(query_data.json", orient="records")
+df = pd.read_json("query_data.json", orient="records")
 
 df = df.select_dtypes(exclude=['object', 'string'])
 
