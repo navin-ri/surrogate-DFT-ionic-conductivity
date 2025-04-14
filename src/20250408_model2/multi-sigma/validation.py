@@ -10,13 +10,15 @@ Changelog:
 import numpy as np
 import pandas as pd
 from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.preprocessing import StandardScaler
+
 import matplotlib.pyplot as plt
 
 # ---------------------------
 # 🔧 Config: File paths
 # ---------------------------
-Y_TRUE_PATH = "/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250325_model2/multi-sigma/y_test.csv"
-Y_PRED_PATH = "/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250325_model2/multi-sigma/y_pred.csv"
+Y_TRUE_PATH = "/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250408_model2/y_test.csv"
+Y_PRED_PATH = "/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250408_model2/y_pred.csv"
 
 # ---------------------------
 # 📥 Load and inverse-transform predictions
@@ -25,9 +27,9 @@ def load_data(y_true_path, y_pred_path):
     y_true_log = pd.read_csv(y_true_path).to_numpy().ravel()
     y_pred_log = pd.read_csv(y_pred_path).to_numpy().ravel()
 
-    # Invert log1p → original scale
-    y_true = np.expm1(y_true_log)
-    y_pred = np.expm1(y_pred_log)
+    # Invert log → original scale
+    y_true = np.exp(y_true_log)
+    y_pred = np.exp(y_pred_log)
 
     return y_true, y_pred
 
@@ -46,16 +48,18 @@ def evaluate_metrics(y_true, y_pred):
 # ---------------------------
 # 📈 Parity plot
 # ---------------------------
+# Original scale
 def plot_parity(y_true, y_pred, r2):
     plt.figure(figsize=(6, 6))
     plt.scatter(y_true, y_pred, alpha=0.7, edgecolors='k')
     plt.plot([min(y_true), max(y_true)],
              [min(y_true), max(y_true)],
              'r--', label='Ideal fit')
-    plt.xlabel("True IC (S/cm)")
-    plt.ylabel("Predicted IC (S/cm)")
-    plt.title(f"Parity Plot — R² = {r2:.3f}")
-    plt.grid(True)
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.xlabel("True IC (S/cm, log scale)")
+    plt.ylabel("Predicted IC (S/cm, log scale)")
+    plt.title(f"Log-log Parity Plot — R² = {r2:.3f}")
     plt.legend()
     plt.tight_layout()
     plt.show()
