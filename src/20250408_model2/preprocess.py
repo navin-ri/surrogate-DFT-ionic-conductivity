@@ -2,8 +2,9 @@
 Title: preprocess.py
 Date: 2025.03.24
 Description: preprocess 137 matched materials
-Version: 0.1.0
+Version: 0.2.0
 Changelog:
+- 0.2.0: stratified test-train split
 - 0.1.0: Initial version
 """
 
@@ -77,7 +78,11 @@ plt.tight_layout()
 plt.show()
 
 ## train-val-test
-X_train, X_test, y_train, y_test = train_test_split(X, y_l, test_size=0.1, random_state=42)
+### Quantile binning of IC for stratified split
+y_bins = pd.qcut(y_l, q=10, labels= False, duplicates= 'drop')
+
+### data split
+X_train, X_test, y_train, y_test = train_test_split(X, y_bins, test_size=0.1, random_state=42)
 
 # Turn the datasets to dataframe with proper column names
 X_train = pd.DataFrame(X_train, columns=pca_columns)
