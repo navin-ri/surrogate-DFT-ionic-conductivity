@@ -28,8 +28,8 @@ def load_data(y_true_path, y_pred_path):
     y_pred_log = pd.read_csv(y_pred_path).to_numpy().ravel()
 
     # Invert log → original scale
-    y_true = np.exp(y_true_log)
-    y_pred = np.exp(y_pred_log)
+    y_true = 10 ** y_true_log
+    y_pred = 10 ** y_pred_log
 
     return y_true, y_pred
 
