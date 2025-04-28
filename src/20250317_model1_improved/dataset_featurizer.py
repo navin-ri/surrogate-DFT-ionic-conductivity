@@ -18,7 +18,6 @@ df = df.select_dtypes(exclude=['object', 'string'])
 df['structure'] = df['structure'].apply(Structure.from_dict)
 
 # ------Initalize features----------
-
 ## Convert pretty formula to composition
 stc = StrToComposition()
 df = stc.featurize_dataframe(df, 'formula_pretty')
