@@ -10,8 +10,8 @@ import joblib
 import numpy as np
 
 # === Step 1: Load and merge prediction and IC data ===
-cif_feat = pd.read_csv("/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/data/cif_ft.csv")
-ic = pd.read_csv('/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/data/cif_ic.csv')
+cif_feat = pd.read_csv("/src/old/20250520_two_stage/data/cif_ft.csv")
+ic = pd.read_csv('/src/old/20250520_two_stage/data/cif_ic.csv')
 
 # Apply log10 transformation
 ic_log = np.log10(ic["Ionic Conductivity (S/cm)"])
@@ -62,7 +62,7 @@ model = ICTransferModel(input_dim=cif_feat.shape[1])
 
 # === Step 6: Load pretrained weights ===
 state_dict = torch.load(
-    "/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/saved_states/best_surrogate_model.pt"
+    "/src/old/20250520_two_stage/saved_states/best_surrogate_model.pt"
 )
 
 with torch.no_grad():
@@ -100,10 +100,10 @@ for epoch in range(50):
 
     if val_loss.item() < best_val_loss:
         best_val_loss = val_loss.item()
-        torch.save(model.state_dict(), "/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/saved_states/best_ic_model.pt")
+        torch.save(model.state_dict(), "/src/old/20250520_two_stage/saved_states/best_ic_model.pt")
 
 # === Step 7: Evaluation ===
-model.load_state_dict(torch.load("/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/saved_states/best_ic_model.pt"))
+model.load_state_dict(torch.load("/src/old/20250520_two_stage/saved_states/best_ic_model.pt"))
 model.eval()
 
 with torch.no_grad():

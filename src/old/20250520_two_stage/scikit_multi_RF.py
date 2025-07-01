@@ -8,21 +8,34 @@ Changelog:
 
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestRegressor
 import matplotlib.pyplot as plt
 
-# Import the dataset
 # === Step 1: Load and merge prediction and IC data ===
-cif_feat = pd.read_csv("/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/data/cif_predictions.csv")
-ic = pd.read_csv('/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/data/cif_ic.csv')
+cif_feat = pd.read_csv("/src/old/20250520_two_stage/data/cif_ft.csv")
+ic = pd.read_csv('/src/old/20250520_two_stage/data/cif_ic.csv')
+
+# Scale before PCA
+#scaler = StandardScaler()
+#X_scaled = scaler.fit_transform(cif_feat)
+
+# Apply PCA to reduce to 100 components (or adjust as needed)
+#pca = PCA(0.95)
+#X_pca = pca.fit_transform(X_scaled)
+
+# Save PCA-transformed features to CSV for use in NN training
+#X_pca_df = pd.DataFrame(X_pca, columns=[f'PC{i+1}' for i in range(X_pca.shape[1])])
 
 # Apply log10 transformation
 ic_log = np.log10(ic["Ionic Conductivity (S/cm)"])
 
 ### Quantile binning of IC for stratified split
-y_bins = pd.cut(ic_log, bins=3, labels= False, duplicates= 'drop')
+y_bins = pd.cut(ic_log, bins=2, labels= False, duplicates= 'drop')
+
 
 # === Step 3: Split and scale ===
 X_train, X_val, y_train, y_val = train_test_split(cif_feat, ic_log, test_size=0.2, stratify= y_bins, random_state=42)
@@ -70,3 +83,17 @@ plt.ylabel("Predicted IC (S/cm)")
 #plt.legend()
 plt.tight_layout()
 plt.show()
+
+import shap
+
+# Create SHAP explainer
+explainer = shap.Explainer(model)
+
+# Compute SHAP values
+shap_values = explainer(X_val)  # X_test: your test feature matrix
+
+# Global feature importance
+shap.summary_plot(shap_values, X_val)
+
+# Local explanation for a single material
+shap.plots.waterfall(shap_values[0])  # Example: first test point

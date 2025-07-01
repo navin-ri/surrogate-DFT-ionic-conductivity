@@ -12,7 +12,7 @@ from pymatgen.core.composition import Composition
 from pymatgen.core.structure import Structure
 
 # import the
-df = pd.read_json("/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250317_model1_improved/query_data.json", orient="records")
+df = pd.read_json("/src/old/20250317_model1_improved/query_data.json", orient="records")
 df['structure'] = df['structure'].apply(Structure.from_dict)
 
 # Test with a small subset of the dataset: 10000

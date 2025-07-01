@@ -16,8 +16,8 @@ from sklearn.ensemble import RandomForestRegressor
 import matplotlib.pyplot as plt
 
 # === Step 1: Load and merge prediction and IC data ===
-cif_feat = pd.read_csv("/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/data/cif_ft.csv")
-ic = pd.read_csv('/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/data/cif_ic.csv')
+cif_feat = pd.read_csv("/src/old/20250520_two_stage/data/cif_ft.csv")
+ic = pd.read_csv('/src/old/20250520_two_stage/data/cif_ic.csv')
 
 # Scale before PCA
 #scaler = StandardScaler()
@@ -36,11 +36,20 @@ ic_log = np.log10(ic["Ionic Conductivity (S/cm)"])
 ### Quantile binning of IC for stratified split
 y_bins = pd.cut(ic_log, bins=2, labels= False, duplicates= 'drop')
 
-
 # === Step 3: Split and scale ===
 X_train, X_val, y_train, y_val = train_test_split(cif_feat, ic_log, test_size=0.2, stratify= y_bins, random_state=42)
 
 # Model initialization
+
+import numpy as np
+# Suppose 'y_train' is your log10(IC) target for training
+# Here, we give higher weights to samples with very low IC
+# For example: weights inversely proportional to the target (more weight to low values)
+
+# custom weighting scheme
+weights = np.ones_like(y_train)
+weights[y_train < -10] = 10  # Give 10× weight to ultra-low IC materials
+
 # Model definition
 from xgboost import XGBRegressor
 
@@ -52,7 +61,7 @@ model = XGBRegressor(
     reg_lambda=1.0,
     random_state=42
 )
-model.fit(X_train, y_train)
+model.fit(X_train, y_train, sample_weight = weights)
 y_pred = model.predict(X_val)
 
 # Evaluate metrics for each target

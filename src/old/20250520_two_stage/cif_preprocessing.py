@@ -11,7 +11,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 # Import the dataset
-df = pd.read_csv('/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/data/cif_features_full.csv')
+df = pd.read_csv('/src/old/20250520_two_stage/data/cif_features_full.csv')
 
 # Dropping the unnecessary columns
 df = df.drop(

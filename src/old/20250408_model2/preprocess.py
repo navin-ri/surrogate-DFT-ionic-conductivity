@@ -32,7 +32,7 @@ df_X.drop(
 df_X['compound possible'] = df_X['compound possible'].astype(int)
 
 # Import ionic conductivity from .csv before .json exportation
-df_y = pd.read_csv('/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250408_model2/matched_data.csv')
+df_y = pd.read_csv('/src/old/20250408_model2/matched_data.csv')
 
 # Remove rows with "Not found" in the MP-ID column
 df_y = df_y[df_y['MP-ID'] != "Not found"]

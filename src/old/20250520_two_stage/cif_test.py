@@ -75,7 +75,7 @@ def main():
         df = feature.featurize_dataframe(df, 'composition')
 
     # --- Step 3: Load fitted BondFractions
-    bond_fractions = joblib.load("/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/saved_states/bond_fractions_fitted.pkl")
+    bond_fractions = joblib.load("/src/old/20250520_two_stage/saved_states/bond_fractions_fitted.pkl")
 
     # --- Step 4: Structure features
     structure_featurizers = [
@@ -89,7 +89,7 @@ def main():
         df = feature.featurize_dataframe(df, 'Structure', ignore_errors=True)
 
     # --- Step 5: Add ionic conductivity values
-    raw = pd.read_csv('/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/data/raw.csv', dtype={'ID': str})
+    raw = pd.read_csv('/src/old/20250520_two_stage/data/raw.csv', dtype={'ID': str})
 
     def get_ic(cif_id):
         match = raw[raw['ID'] == cif_id]

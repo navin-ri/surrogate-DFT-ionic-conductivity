@@ -16,7 +16,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.decomposition import PCA
 
 # Load .csv file
-df = pd.read_csv('/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250428_CIF_test/cif_features_full.csv')
+df = pd.read_csv('/src/old/20250428_CIF_test/cif_features_full.csv')
 print(df.columns.tolist())
 df_X = df.drop(
     columns=[

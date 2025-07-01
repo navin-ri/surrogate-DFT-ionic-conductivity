@@ -17,8 +17,8 @@ import matplotlib.pyplot as plt
 # ---------------------------
 # 🔧 Config: File paths
 # ---------------------------
-Y_TRUE_PATH = "/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250408_model2/y_test.csv"
-Y_PRED_PATH = "/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250408_model2/y_pred.csv"
+Y_TRUE_PATH = "/src/old/20250408_model2/y_test.csv"
+Y_PRED_PATH = "/src/old/20250408_model2/y_pred.csv"
 
 # ---------------------------
 # 📥 Load and inverse-transform predictions

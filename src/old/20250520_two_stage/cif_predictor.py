@@ -5,11 +5,11 @@ import joblib
 import numpy as np
 
 # === 1. Load featurized input data ===
-input_path = "/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/data/cif_ft.csv"  # Update path if needed
+input_path = "/src/old/20250520_two_stage/data/cif_ft.csv"  # Update path if needed
 df = pd.read_csv(input_path)
 
 # === 2. Load scaler and transform features ===
-scaler = joblib.load("/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/saved_states/scaler.pkl")
+scaler = joblib.load("/src/old/20250520_two_stage/saved_states/scaler.pkl")
 X_scaled = scaler.transform(df)
 
 # === 3. Define the model architecture (must match training) ===
@@ -29,7 +29,7 @@ class Architecture(nn.Module):
 
 # === 4. Load the trained model ===
 model = Architecture(input_dim=X_scaled.shape[1])
-model.load_state_dict(torch.load("/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/saved_states/best_surrogate_model.pt"))
+model.load_state_dict(torch.load("/src/old/20250520_two_stage/saved_states/best_surrogate_model.pt"))
 model.eval()
 
 # === 5. Predict using the model ===
@@ -49,6 +49,6 @@ predictions_df = pd.DataFrame(
 result_df = pd.concat([df, predictions_df], axis=1)
 
 # === 7. Save final prediction dataset ===
-output_path = "/Users/navin/Library/CloudStorage/Dropbox-AIZOTH/研究/Navin/NIMS/surrogate-DFT-ionic-conductivity/src/20250520_two_stage/data/cif_predictions.csv"
+output_path = "/src/old/20250520_two_stage/data/cif_predictions.csv"
 result_df.to_csv(output_path, index=False)
 print(f"✅ Predictions saved to {output_path}")
