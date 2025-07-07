@@ -13,5 +13,13 @@ preprocess.ipynb
 - used 'loc' method to extract columns that are unique to avoid redundant constant (nunique()>1)
 - train-val-test: 8:1:1 split
 
+# predict MP + BVSE properties
+- The predictions are worse after using the dataset maerged for BVSE. 
+- Need to check how they perform against IC.
+
+# IC preprocess
+ic_preprocess.ipynb
+- use the preprocessed.ipynb output (basic_matminer.csv) as reference and picked the columns from IC dataset.
+
 ## Future
 - The DFT NEB em have to be integrated into the merged dataset
