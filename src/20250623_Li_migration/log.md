@@ -13,13 +13,26 @@ preprocess.ipynb
 - used 'loc' method to extract columns that are unique to avoid redundant constant (nunique()>1)
 - train-val-test: 8:1:1 split
 
-# predict MP + BVSE properties
+# train MP + BVSE model
 - The predictions are worse after using the dataset maerged for BVSE. 
 - Need to check how they perform against IC.
 
 # IC preprocess
 ic_preprocess.ipynb
-- use the preprocessed.ipynb output (basic_matminer.csv) as reference and picked the columns from IC dataset.
+- use the preprocessed.ipynb output (X_train.csv) as reference and picked the columns from IC dataset.
+
+# Predict of MP+  BVSE 
+neural_network.ipynb
+O/P: 
+    - cif_preds_only.csv
+    - cif_feat_append.csv
+- the trained model in the jupyternotebook was used to create the predictions of CIF feats created in ic_preprocess.ipynb
+
+# IC prediction
+ic_pred_xgb.ipynb
+- The prediction accuracy not fair
+- Try top features!!
+- Try classification labels into it!
 
 ## Future
-- The DFT NEB em have to be integrated into the merged dataset
+- The DFT NEB em have to be integrated into the merged dataset (NEB is absent :( )
