@@ -9,3 +9,4 @@ dataprep.ipynb
 ## Model 1 
 basic_model1.ipynb
 - the model predicts the matminer structure features + band gap and formation energy
+- one hot encode the crystal system and space groups
