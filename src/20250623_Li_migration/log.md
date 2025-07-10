@@ -29,9 +29,10 @@ O/P:
 - the trained model in the jupyternotebook was used to create the predictions of CIF feats created in ic_preprocess.ipynb
 
 # IC prediction
-ic_pred_xgb.ipynb
-- The prediction accuracy not fair
+ic_bvse_xgb.ipynb
+- The prediction accuracy not fair (R2 = 0.75). Cross validation and ensembling pending.
 - Try top features!!
+    - does not improve further!
 - Try classification labels into it!
 
 ## Future
